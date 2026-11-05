@@ -1,6 +1,6 @@
 plugins {
-    id("com.gradleup.shadow") version "8.3.8"
-    id("io.freefair.lombok") version "8.14"
+    id("com.gradleup.shadow") version "9.5.1"
+    id("io.freefair.lombok") version "9.8.3"
     id("java")
     id("jacoco")
     id("base")

@@ -12,18 +12,18 @@
             <!-- Dependencies -->
             <SpigotAPI>1.21.4-R0.1-SNAPSHOT</SpigotAPI>
             <AuthLib>1.5.26</AuthLib>
-            <WorldEdit>7.3.15</WorldEdit>
-            <FAWE>2.13.0</FAWE>
+            <WorldEdit>7.4.2</WorldEdit>
+            <FAWE>2.16.1</FAWE>
             <VaultAPI>1.7.1</VaultAPI>
-            <PlaceholderAPI>2.11.6</PlaceholderAPI>
-            <Lombok>1.18.38</Lombok>
-            <CommonsIO>2.19.0</CommonsIO>
-            <Minimessage>4.23.0</Minimessage>
+            <PlaceholderAPI>2.12.3</PlaceholderAPI>
+            <Lombok>1.18.48</Lombok>
+            <CommonsIO>2.22.0</CommonsIO>
+            <Minimessage>5.2.0</Minimessage>
 
             <!-- Test dependencies -->
-            <junitjupiter>5.13.3</junitjupiter>
-            <mockitocore>5.18.0</mockitocore>
-            <assertjcore>3.27.3</assertjcore>
+            <junitjupiter>6.1.3</junitjupiter>
+            <mockitocore>5.24.0</mockitocore>
+            <assertjcore>3.27.7</assertjcore>
 
             <!-- Compiler information (java version and encoding type) -->
             <maven.compiler.release>21</maven.compiler.release>
@@ -60,7 +60,7 @@
                 <dependency>
                     <groupId>com.intellectualsites.bom</groupId> <!-- https://github.com/IntellectualSites/bom -->
                     <artifactId>bom-newest</artifactId>
-                    <version>1.52</version>
+                    <version>1.56</version>
                     <scope>import</scope>
                     <type>pom</type>
                 </dependency>
@@ -176,7 +176,7 @@
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>properties-maven-plugin</artifactId>
-            <version>1.2.1</version>
+            <version>1.3.1</version>
             <executions>
                 <execution>
                     <phase>initialize</phase>

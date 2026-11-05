@@ -1,6 +1,6 @@
 plugins {
-    id("com.gradleup.shadow") version "8.3.8"
-    id("io.freefair.lombok") version "8.14"
+    id("com.gradleup.shadow") version "9.5.1"
+    id("io.freefair.lombok") version "9.8.3"
     id("java")
     id("jacoco")
     id("base")
@@ -9,18 +9,18 @@ plugins {
 ext {
 SpigotAPI = "1.21.4-R0.1-SNAPSHOT"
 AuthLib = "1.5.26"
-WorldEdit = "7.3.15"
-FAWE = "2.13.0"
-Chunky = "1.4.43"
+WorldEdit = "7.4.2"
+FAWE = "2.16.1"
+Chunky = "1.4.57"
 VaultAPI = "1.7.1"
-PlaceholderAPI = "2.11.6"
-Lombok = "1.18.38"
-CommonsIO = "2.19.0"
-Minimessage = "4.23.0"
+PlaceholderAPI = "2.12.3"
+Lombok = "1.18.48"
+CommonsIO = "2.22.0"
+Minimessage = "5.2.0"
 gson = "2.11.0"
 guava = "31.1-jre"
 
-Jupiter = "5.+"
+Jupiter = "6.+"
 Mockito = "5.+"
 Assertj = "3.+"
 }
