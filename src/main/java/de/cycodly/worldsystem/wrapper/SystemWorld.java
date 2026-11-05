@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 /**
@@ -134,22 +135,37 @@ public class SystemWorld {
         if (!world.exists()) {
             world = new File(Bukkit.getWorldContainer(), worldname);
         } else {
-            if (new File(Bukkit.getWorldContainer(), worldname).exists()
-                    && new File(PluginConfig.getWorlddir() + "/" + worldname).exists()) {
+//            if (new File(Bukkit.getWorldContainer(), worldname).exists()
+//                    && new File(PluginConfig.getWorlddir() + "/" + worldname).exists()) {
+//                try {
+//                    FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer(), worldname));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            try {
+//                FileUtils.moveDirectoryToDirectory(world, Bukkit.getWorldContainer(), false);
+//            } catch (IOException e) {
+//                if (p != null && p.isOnline())
+//                    p.sendMessage(PluginConfig.getPrefix() + "§cError: " + e.getMessage());
+//                WorldSystemPlugin.logger().log(Level.SEVERE, "Couldn't load world of " + uuid);
+//                e.printStackTrace();
+//                return false;
+//            }
+            // Create new symlink
+            final File dimensionsFolder = getDimensionsDirectory(p::sendMessage);
+            if (dimensionsFolder == null) {
+                return false;
+            } else {
                 try {
-                    FileUtils.deleteDirectory(new File(Bukkit.getWorldContainer(), worldname));
+                    //FileUtils.moveDirectoryToDirectory(world, Bukkit.getWorldContainer(), false);
+                    Path link = dimensionsFolder.toPath().resolve(worldname);
+                    Files.createSymbolicLink(link, world.toPath().toAbsolutePath());
                 } catch (IOException e) {
+                    WorldSystemPlugin.logger().log(Level.SEVERE, "Couldn't load world of " + p.getName());
+                    p.sendMessage(PluginConfig.getPrefix() + "§cError: " + e.getMessage());
                     e.printStackTrace();
                 }
-            }
-            try {
-                FileUtils.moveDirectoryToDirectory(world, Bukkit.getWorldContainer(), false);
-            } catch (IOException e) {
-                if (p != null && p.isOnline())
-                    p.sendMessage(PluginConfig.getPrefix() + "§cError: " + e.getMessage());
-                WorldSystemPlugin.logger().log(Level.SEVERE, "Couldn't load world of " + uuid);
-                e.printStackTrace();
-                return false;
             }
         }
 
@@ -311,13 +327,9 @@ public class SystemWorld {
         // Move World into Server dir
         String worlddir = PluginConfig.getWorlddir();
         File world = new File(worlddir + "/" + worldname);
-        final File wsDimensionsDirectory = new File(Bukkit.getServer().getLevelDirectory().toFile(), "dimensions/" + WorldSystemPlugin.getInstance().getName().toLowerCase());
-        if (!wsDimensionsDirectory.exists()) {
-            if (!wsDimensionsDirectory.mkdirs()) {
-                WorldSystemPlugin.logger().log(Level.SEVERE, "FAILED to create WS dimensions directory <" + wsDimensionsDirectory.getAbsolutePath() + ">!");
-                p.sendMessage("FAILED to create dimensions directory!");
-                return;
-            }
+        final File wsDimensionsDirectory = getDimensionsDirectory(p::sendMessage);
+        if (wsDimensionsDirectory == null) {
+            return;
         }
 
         if (world.exists()) {
@@ -380,21 +392,36 @@ public class SystemWorld {
         dc.setLastLoaded();
     }
 
+    static File getDimensionsDirectory(Consumer<String> messageSender) {
+        final File wsDimensionsDirectory = new File(Bukkit.getServer().getLevelDirectory().toFile(), "dimensions/" + WorldSystemPlugin.getInstance().getName().toLowerCase());
+        if (!wsDimensionsDirectory.exists()) {
+            if (!wsDimensionsDirectory.mkdirs()) {
+                WorldSystemPlugin.logger().log(Level.SEVERE, "FAILED to create WS dimensions directory <" + wsDimensionsDirectory.getAbsolutePath() + ">!");
+                messageSender.accept("FAILED to create dimensions directory!");
+                return null;
+            }
+        }
+        return wsDimensionsDirectory;
+    }
+
     /**
      * @return if the world is loaded
      */
     public boolean isLoaded() {
-        File worldAsDir = new File(Bukkit.getWorldContainer(), worldname + "/worldconfig.yml");
         World w = Bukkit.getWorld(worldname);
-        return worldAsDir.exists() && w != null;
+        if (w == null) {
+            return false;
+        }
+        File worldAsDir = new File(w.getWorldFolder(), "worldconfig.yml");
+        return worldAsDir.exists();
     }
 
     private boolean exists() {
-        File worldAsDir = new File(Bukkit.getWorldContainer(), worldname + "/worldconfig.yml");
-        if (worldAsDir.exists()) {
+        if (isLoaded()) {
             return true;
         }
-        worldAsDir = new File(PluginConfig.getWorlddir() + "/" + worldname + "/worldconfig.yml");
+        // NOt loaded, check for file in storage
+        File worldAsDir = new File(PluginConfig.getWorlddir() + "/" + worldname + "/worldconfig.yml");
         return worldAsDir.exists();
     }
 
