@@ -413,7 +413,7 @@ public class WorldConfig {
                 if (PluginConfig.contactAuth()) {
                     try {
                         GameProfile prof = GameProfileBuilder.fetch(uuid);
-                        map.put(uuid, prof.getName());
+                        map.put(uuid, prof.name());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

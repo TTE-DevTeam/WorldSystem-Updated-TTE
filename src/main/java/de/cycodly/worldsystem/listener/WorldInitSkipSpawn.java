@@ -6,7 +6,6 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
-import org.bukkit.GameRule;
 
 public class WorldInitSkipSpawn implements Listener {
 
@@ -19,6 +18,7 @@ public class WorldInitSkipSpawn implements Listener {
             return;
         }
         SettingsConfig.editWorld(world);
-        world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 0);
+        // 1.21.9 removed spawnchunks, no longer necessary!
+        //world.setGameRule(GameRule.SPAWN_CHUNK_RADIUS, 0);
     }
 }

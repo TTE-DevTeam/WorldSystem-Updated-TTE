@@ -36,7 +36,7 @@ public class GameProfileBuilder {
         }
 
         String url = String.format("https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false",
-                UUIDTypeAdapter.fromUUID(uuid));
+                uuid.toString().replaceAll("-", ""));
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
@@ -74,14 +74,14 @@ public class GameProfileBuilder {
 
         List<Object> args = new ArrayList<>();
         args.add(Long.valueOf(System.currentTimeMillis()));
-        args.add(UUIDTypeAdapter.fromUUID(uuid));
+        args.add(uuid.toString().replaceAll("-", ""));
         args.add(name);
         args.add(skinUrl);
         if (cape) {
             args.add(capeUrl);
         }
 
-        profile.getProperties().put("textures",
+        profile.properties().put("textures",
                 new Property("textures", Base64.getEncoder().encodeToString(String.format(
                         cape
                                 ? "{\"timestamp\":%d,\"profileId\":\"%s\",\"profileName\":\"%s\",\"isPublic\":true,\"textures\":{\"SKIN\":{\"url\":\"%s\"},\"CAPE\":{\"url\":\"%s\"}}}"
@@ -105,7 +105,7 @@ public class GameProfileBuilder {
             if (object.has("properties")) {
                 for (Map.Entry<String, Property> prop : ((PropertyMap) context.deserialize(object.get("properties"),
                         PropertyMap.class)).entries()) {
-                    profile.getProperties().put(prop.getKey(), prop.getValue());
+                    profile.properties().put(prop.getKey(), prop.getValue());
                 }
             }
             return profile;
@@ -113,14 +113,14 @@ public class GameProfileBuilder {
 
         public JsonElement serialize(GameProfile profile, Type type, JsonSerializationContext context) {
             JsonObject result = new JsonObject();
-            if (profile.getId() != null) {
-                result.add("id", context.serialize(profile.getId()));
+            if (profile.id() != null) {
+                result.add("id", context.serialize(profile.id()));
             }
-            if (profile.getName() != null) {
-                result.addProperty("name", profile.getName());
+            if (profile.name() != null) {
+                result.addProperty("name", profile.name());
             }
-            if (!profile.getProperties().isEmpty()) {
-                result.add("properties", context.serialize(profile.getProperties()));
+            if (!profile.properties().isEmpty()) {
+                result.add("properties", context.serialize(profile.properties()));
             }
             return result;
         }
