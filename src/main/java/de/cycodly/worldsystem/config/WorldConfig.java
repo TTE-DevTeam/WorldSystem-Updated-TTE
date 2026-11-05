@@ -460,7 +460,7 @@ public class WorldConfig {
     }
 
     private String getWorldName() {
-        return "ID" + id + "-" + owner;
+        return "id" + id + "-" + owner;
     }
 
     public WorldConfig load() {

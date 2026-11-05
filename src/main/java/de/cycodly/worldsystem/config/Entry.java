@@ -20,7 +20,7 @@ public class Entry {
         if (cfg.getString("Dependences." + uuid + ".ActualName") == null) {
             worldname = "n";
         } else {
-            worldname = "ID" + cfg.getInt("Dependences." + uuid + ".ID") + " " + uuid;
+            worldname = "id" + cfg.getInt("Dependences." + uuid + ".ID") + " " + uuid;
             id = cfg.getInt("Dependences." + uuid + ".ID");
         }
     }

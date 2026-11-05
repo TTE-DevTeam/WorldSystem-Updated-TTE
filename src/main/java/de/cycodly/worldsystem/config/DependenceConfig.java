@@ -123,7 +123,7 @@ public class DependenceConfig {
         YamlConfiguration dcfg = YamlConfiguration.loadConfiguration(dconfig);
         String uuid = this.uuid.toString();
         int id = dcfg.getInt("Dependences." + uuid + ".ID");
-        return "ID" + id + "-" + uuid;
+        return "id" + id + "-" + uuid;
     }
 
     public String getWorldNameByOfflinePlayer() {
@@ -134,7 +134,7 @@ public class DependenceConfig {
         if (cfg.getString("Dependences." + uuid + ".ActualName") == null) {
             name = "n";
         } else {
-            name = "ID" + cfg.getInt("Dependences." + uuid + ".ID") + "-" + uuid;
+            name = "id" + cfg.getInt("Dependences." + uuid + ".ID") + "-" + uuid;
         }
         return name;
     }

@@ -101,7 +101,7 @@ public class SystemWorld {
         String worldname = "id" + id + "-" + uuid;
         Player p = Bukkit.getPlayer(uniqueID);
 
-        WorldCreator creator = template.generatorSettings.asWorldCreator(worldname);
+        WorldCreator creator = template.generatorSettings.asWorldCreator("minecraft:" + worldname);
 
         WorldCreateEvent event = new WorldCreateEvent(uniqueID, creator);
         Bukkit.getPluginManager().callEvent(event);
@@ -365,7 +365,7 @@ public class SystemWorld {
             worldname = myName.toString();
         }
 
-        WorldCreator creator = new WorldCreator(WorldSystemPlugin.getInstance().getName().toLowerCase() + ":" + worldname);
+        WorldCreator creator = WorldCreator.ofKey(new NamespacedKey("minecraft", worldname));
 
         String templateKey = WorldConfig.getWorldConfig(worldname).getTemplateKey();
         WorldTemplate template = WorldTemplateProvider.getInstance().getTemplate(templateKey);
@@ -373,7 +373,7 @@ public class SystemWorld {
             template = WorldTemplateProvider.getInstance().getTemplate(PluginConfig.getDefaultWorldTemplate());
 
         if (template != null)
-            creator = template.generatorSettings.asWorldCreator(worldname);
+            creator = template.generatorSettings.asWorldCreator("minecraft:" + worldname);
 
         World w = Bukkit.getWorld(worldname);
         if (w == null)
@@ -393,7 +393,7 @@ public class SystemWorld {
     }
 
     static File getDimensionsDirectory(Consumer<String> messageSender) {
-        final File wsDimensionsDirectory = new File(Bukkit.getServer().getLevelDirectory().toFile(), "dimensions/" + WorldSystemPlugin.getInstance().getName().toLowerCase());
+        final File wsDimensionsDirectory = new File(Bukkit.getServer().getLevelDirectory().toFile(), "dimensions/" + /*WorldSystemPlugin.getInstance().getName().toLowerCase()*/ "minecraft");
         if (!wsDimensionsDirectory.exists()) {
             if (!wsDimensionsDirectory.mkdirs()) {
                 WorldSystemPlugin.logger().log(Level.SEVERE, "FAILED to create WS dimensions directory <" + wsDimensionsDirectory.getAbsolutePath() + ">!");

@@ -1,6 +1,7 @@
 package de.cycodly.worldsystem.wrapper;
 
 import lombok.AllArgsConstructor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
@@ -21,7 +22,7 @@ public class GeneratorSettings {
     }
 
     public WorldCreator asWorldCreator(String name) {
-        WorldCreator creator = new WorldCreator(name);
+        WorldCreator creator = WorldCreator.ofKey(NamespacedKey.fromString(name));
 
         if (type != null)
             creator.type(type);
