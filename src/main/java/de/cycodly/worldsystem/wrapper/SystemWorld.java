@@ -18,6 +18,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -260,10 +262,13 @@ public class SystemWorld {
             // Still in world unloading process?
             if (unloading && w.getPlayers().size() == 0) {
                 if (Bukkit.unloadWorld(w, true)) {
-                    File worldinserver = new File(Bukkit.getWorldContainer(), worldname);
                     File worlddir = new File(PluginConfig.getWorlddir());
                     try {
-                        FileUtils.moveDirectoryToDirectory(worldinserver, worlddir, false);
+                        if (Files.isSymbolicLink(w.getWorldPath())) {
+                            Files.delete(w.getWorldPath());
+                        } else {
+                            FileUtils.moveDirectoryToDirectory(w.getWorldFolder(), worlddir, false);
+                        }
                         Bukkit.getWorlds().remove(w);
                         setUnloading(false);
                     } catch (IOException e) {
@@ -306,10 +311,18 @@ public class SystemWorld {
         // Move World into Server dir
         String worlddir = PluginConfig.getWorlddir();
         File world = new File(worlddir + "/" + worldname);
+        final File wsDimensionsDirectory = new File(Bukkit.getServer().getLevelDirectory().toFile(), "dimensions/" + WorldSystemPlugin.getInstance().getName().toLowerCase());
+        if (!wsDimensionsDirectory.exists()) {
+            if (!wsDimensionsDirectory.mkdirs()) {
+                WorldSystemPlugin.logger().log(Level.SEVERE, "FAILED to create WS dimensions directory <" + wsDimensionsDirectory.getAbsolutePath() + ">!");
+                p.sendMessage("FAILED to create dimensions directory!");
+                return;
+            }
+        }
 
         if (world.exists()) {
             // Check for duplicated worlds
-            File propablyExistingWorld = new File(Bukkit.getWorldContainer(), worldname);
+            File propablyExistingWorld = new File(wsDimensionsDirectory, worldname);
             if (propablyExistingWorld.exists()) {
                 WorldSystemPlugin.logger().log(Level.SEVERE, "World " + worldname + " existed twice!");
                 try {
@@ -322,7 +335,9 @@ public class SystemWorld {
 
             // Move world if exists
             try {
-                FileUtils.moveDirectoryToDirectory(world, Bukkit.getWorldContainer(), false);
+                //FileUtils.moveDirectoryToDirectory(world, Bukkit.getWorldContainer(), false);
+                Path link = wsDimensionsDirectory.toPath().resolve(worldname);
+                Files.createSymbolicLink(link, world.toPath().toAbsolutePath());
             } catch (IOException e) {
                 WorldSystemPlugin.logger().log(Level.SEVERE, "Couldn't load world of " + p.getName());
                 p.sendMessage(PluginConfig.getPrefix() + "§cError: " + e.getMessage());
@@ -338,7 +353,7 @@ public class SystemWorld {
             worldname = myName.toString();
         }
 
-        WorldCreator creator = new WorldCreator(worldname);
+        WorldCreator creator = new WorldCreator(WorldSystemPlugin.getInstance().getName().toLowerCase() + ":" + worldname);
 
         String templateKey = WorldConfig.getWorldConfig(worldname).getTemplateKey();
         WorldTemplate template = WorldTemplateProvider.getInstance().getTemplate(templateKey);
