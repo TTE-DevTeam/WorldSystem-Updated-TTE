@@ -32,8 +32,6 @@ dependencies {
     annotationProcessor(libs.lombok)
     implementation(libs.commonsio)
     implementation(libs.minimessage)
-    implementation(libs.bstatsBukkit) { isTransitive = false }
-    implementation(libs.bstatsBase) { isTransitive = false }
     compileOnly(libs.lombok)
     compileOnly(libs.placeholderapi)
     compileOnly(libs.vaultapi)

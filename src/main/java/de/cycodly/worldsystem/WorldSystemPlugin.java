@@ -11,8 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SingleLineChart;
 
 import de.cycodly.worldsystem.commands.CommandRegistry;
 import de.cycodly.worldsystem.config.DependenceConfig;
@@ -149,8 +147,6 @@ public class WorldSystemPlugin extends JavaPlugin {
         }, 20 * 60 * 2, 20 * 60 * 2);
 
         // System.setProperty("bstats.relocatecheck", "false");
-        Metrics metrics = new Metrics(this, BSTATS_ID);
-        metrics.addCustomChart(new SingleLineChart("worlds", DependenceConfig::getHighestID));
 
         if (Bukkit.getPluginManager().getPlugin("Chunky") != null && PluginConfig.loadWorldsASync()) {
 
