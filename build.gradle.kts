@@ -8,7 +8,7 @@ plugins {
     `maven-publish`
     id("io.github.0ffz.github-packages") version "1.2.1"
     id("io.papermc.hangar-publish-plugin") version "0.1.2"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.13"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.23"
 }
 
 repositories {
@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     annotationProcessor("org.jetbrains:annotations-java5:24.1.0")
-    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("26.3.build.+")
     compileOnly("it.unimi.dsi:fastutil:8.5.11")
     implementation("xyz.xenondevs.invui:invui:1.45")
     annotationProcessor(libs.lombok)
@@ -60,7 +60,11 @@ paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArt
 group = "de.dertoaster"
 version = "3.0.0-TTE"
 description = "WorldSystem-TTE"
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release = 21
+}
 
 
 tasks.jar {
@@ -72,6 +76,11 @@ tasks.jar {
 tasks.processResources {
     from(rootProject.file("LICENSE.md"))
     filesMatching("*.yml") {
-        expand(mapOf("projectVersion" to project.version))
+        expand(mapOf(
+            "verison" to project.version,
+            "pluginname" to project.name,
+            "group" to project.group,
+            "projectVersion" to project.version
+        ))
     }
 }
