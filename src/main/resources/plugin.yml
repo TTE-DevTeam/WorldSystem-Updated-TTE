@@ -1,9 +1,9 @@
 name: ${pluginname}
-main: de.cycodly.worldsystem.WorldSystemPlugin
+main: ${group}.worldsystem.WorldSystemPlugin
 version: ${version}
 authors: ${authors}
-description: "Worldsystem plugin - barely hold together by duct tape"
-api-version: 26.3
+description: ${description}
+api-version: ${apiversion}
 load: STARTUP
 folia-supported: false
 depend: ${depend}

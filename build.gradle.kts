@@ -58,12 +58,22 @@ configurations.all {
 paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 
 group = "de.dertoaster"
-version = "3.0.0-TTE"
+version = "3.0.0"
 description = "WorldSystem-TTE"
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
+val plugingroup = "de.cycodly"
+val pluginname = "WorldSystem"
+val pluginauthors = "[Butzlabben, Trainerlord, Cycodly]"
+val pluginversion = "3.0.0"
+val plugindescription = "Worldsystem - Let players create thier own worlds"
+val pluginapiversion = "26.3"
+val pluginminecraft = "26.3"
+val plugindepend = "[WorldEdit]"
+val pluginsoftdepend = "[PlaceholderAPI, Vault, Chunky]"
+
 tasks.withType<JavaCompile>().configureEach {
-    options.release = 21
+    options.release = 25
 }
 
 
@@ -77,10 +87,14 @@ tasks.processResources {
     from(rootProject.file("LICENSE.md"))
     filesMatching("*.yml") {
         expand(mapOf(
-            "verison" to project.version,
-            "pluginname" to project.name,
-            "group" to project.group,
-            "projectVersion" to project.version
+            "pluginname" to pluginname,
+            "group" to plugingroup,
+            "version" to pluginversion,
+            "authors" to pluginauthors,
+            "description" to plugindescription,
+            "apiversion" to pluginapiversion,
+            "depend" to plugindepend,
+            "softdepend" to pluginsoftdepend
         ))
     }
 }
