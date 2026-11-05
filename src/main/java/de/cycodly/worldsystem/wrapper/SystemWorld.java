@@ -98,7 +98,7 @@ public class SystemWorld {
 
         String uuid = uniqueID.toString();
         int id = DependenceConfig.getHighestID() + 1;
-        String worldname = "ID" + id + "-" + uuid;
+        String worldname = "id" + id + "-" + uuid;
         Player p = Bukkit.getPlayer(uniqueID);
 
         WorldCreator creator = template.generatorSettings.asWorldCreator(worldname);
