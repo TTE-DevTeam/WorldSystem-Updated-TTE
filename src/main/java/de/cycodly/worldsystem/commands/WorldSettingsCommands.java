@@ -35,6 +35,11 @@ public class WorldSettingsCommands {
         if (sender instanceof Player) {
             Player p = (Player) sender;
 
+            if (!sender.hasPermission("ws.reset")) {
+                sender.sendMessage(MessageConfig.getNoPermission());
+                return false;
+            }
+
             DependenceConfig dc = new DependenceConfig(p);
             String worldname = dc.getWorldname();
             SystemWorld sw = SystemWorld.getSystemWorld(worldname);
