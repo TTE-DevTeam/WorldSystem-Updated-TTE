@@ -226,10 +226,13 @@ public class SystemWorld {
         }
         if (unloading) {
             if (Bukkit.unloadWorld(w, true)) {
-                File worldinserver = new File(Bukkit.getWorldContainer(), worldname);
                 File worlddir = new File(PluginConfig.getWorlddir());
                 try {
-                    FileUtils.moveDirectoryToDirectory(worldinserver, worlddir, false);
+                    if (Files.isSymbolicLink(w.getWorldPath())) {
+                        Files.delete(w.getWorldPath());
+                    } else {
+                        FileUtils.moveDirectoryToDirectory(w.getWorldFolder(), worlddir, false);
+                    }
                     Bukkit.getWorlds().remove(w);
                 } catch (IOException e) {
                     e.printStackTrace();
